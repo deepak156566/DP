@@ -1,0 +1,43 @@
+#include <bits/stdc++.h>
+using namespace std;
+int ans(int n,vector<int>&arr,vector<int>&dp){
+    if(n<0)
+    return 0;
+    if(n==0)
+    return arr[0];
+    int take=arr[n]+ans(n-2,arr,dp);
+    int ntake=ans(n-1,arr,dp);
+    return max(take,ntake);
+
+}
+int main() {
+	// your code goes here
+	int n=6;
+    vector<int>arr={2,5,3,7,10,4};
+    vector<int>dp(n,-1);
+    dp[0]=arr[0];
+    
+    for(int i=1;i<n;i++){
+        int ntake=dp[i-1];
+        int take=arr[i];
+        if(i-2>=0)
+        take+=dp[i-2];
+        dp[i]=max(take,ntake);
+    }
+    
+    int prev1=arr[0];
+    int prev2=INT_MIN;
+        for(int i=1;i<n;i++){
+        int ntake=prev1;
+        int take=arr[i];
+        if(i-2>=0)
+        take+=prev2;
+        dp[i]=max(take,ntake);
+        prev2=prev1;
+        prev1=dp[i];
+    }
+    
+    cout<<prev1<<endl;
+    cout<<dp[n-1]<<endl;
+    cout<<ans(n-1,arr,dp);
+}
